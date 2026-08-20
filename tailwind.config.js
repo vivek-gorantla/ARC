@@ -36,9 +36,9 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"JetBrains Mono"', '"SF Mono"', 'ui-monospace', 'monospace'],
-        display: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Outfit"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       fontSize: {
         'display-2xl': ['clamp(3.5rem, 8vw, 7rem)', { lineHeight: '0.95', letterSpacing: '-0.04em', fontWeight: '800' }],

@@ -6,116 +6,56 @@ interface ProductImageProps {
   className?: string;
 }
 
-const categoryGradients: Record<Category, string> = {
-  laptops: 'from-ink-700 to-ink-900',
-  monitors: 'from-ink-600 to-ink-900',
-  keyboards: 'from-ink-700 to-ink-800',
-  mice: 'from-ink-600 to-ink-800',
-  headphones: 'from-ink-700 to-ink-900',
-  hubs: 'from-ink-600 to-ink-900',
-  stands: 'from-ink-700 to-ink-800',
-  storage: 'from-ink-600 to-ink-900',
-  desk: 'from-ink-700 to-ink-800',
+const productImages: Record<string, string> = {
+  'LAP-001': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop',
+  'LAP-002': 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=800&auto=format&fit=crop',
+  'LAP-003': 'https://images.unsplash.com/photo-1496181130204-755241544e35?q=80&w=800&auto=format&fit=crop',
+  'LAP-004': 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=800&auto=format&fit=crop',
+  'MON-001': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=800&auto=format&fit=crop',
+  'MON-002': 'https://images.unsplash.com/photo-1547082299-de196ea013d6?q=80&w=800&auto=format&fit=crop',
+  'KBD-001': 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=800&auto=format&fit=crop',
+  'KBD-002': 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=800&auto=format&fit=crop',
+  'MOU-001': 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=800&auto=format&fit=crop',
+  'MOU-002': 'https://images.unsplash.com/photo-1625806782771-0810972f6f0f?q=80&w=800&auto=format&fit=crop',
+  'HDP-001': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
+  'HDP-002': 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=800&auto=format&fit=crop',
+  'HUB-001': 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?q=80&w=800&auto=format&fit=crop',
+  'HUB-002': 'https://images.unsplash.com/photo-1563770660941-20978e870e26?q=80&w=800&auto=format&fit=crop',
+  'STND-001': 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800&auto=format&fit=crop', // wood stand / setup scene
+  'STND-002': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
+  'STOR-001': 'https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=800&auto=format&fit=crop',
+  'STOR-002': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop',
+  'DSK-001': 'https://images.unsplash.com/photo-1632292224971-0d45778bd364?q=80&w=800&auto=format&fit=crop',
+  'DSK-002': 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=800&auto=format&fit=crop',
+};
+
+const categoryFallbackImages: Record<Category, string> = {
+  laptops: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop',
+  monitors: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=800&auto=format&fit=crop',
+  keyboards: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=800&auto=format&fit=crop',
+  mice: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=800&auto=format&fit=crop',
+  headphones: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
+  hubs: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?q=80&w=800&auto=format&fit=crop',
+  stands: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=800&auto=format&fit=crop',
+  storage: 'https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=800&auto=format&fit=crop',
+  desk: 'https://images.unsplash.com/photo-1632292224971-0d45778bd364?q=80&w=800&auto=format&fit=crop',
 };
 
 export function ProductImage({ imageId, category, className = '' }: ProductImageProps) {
+  const imageUrl = productImages[imageId] || categoryFallbackImages[category];
+
   return (
-    <div
-      className={`relative overflow-hidden bg-gradient-to-br ${categoryGradients[category]} ${className}`}
-    >
-      <div className="absolute inset-0 grid-faint opacity-40" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <ProductGlyph category={category} />
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ink-100/20 to-transparent" />
-      <div className="absolute top-3 right-3 label-mono text-ink-300/60">
+    <div className={`relative overflow-hidden bg-ink-900 group-hover/img:scale-105 transition-transform duration-700 ${className}`}>
+      <img
+        src={imageUrl}
+        alt={imageId}
+        className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink-950/60 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute top-3 right-3 label-mono bg-ink-950/80 border border-white/10 px-2 py-0.5 text-white/80 text-[9px] backdrop-blur-sm tracking-wider font-mono">
         {imageId}
       </div>
     </div>
   );
-}
-
-function ProductGlyph({ category }: { category: Category }) {
-  const common = 'text-ink-100/40';
-  switch (category) {
-    case 'laptops':
-      return (
-        <svg viewBox="0 0 200 140" className={`w-3/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="30" y="20" width="140" height="85" rx="6" />
-          <rect x="38" y="28" width="124" height="69" rx="2" fill="currentColor" fillOpacity="0.08" />
-          <path d="M20 112h160l-8 16H28z" fill="currentColor" fillOpacity="0.06" />
-          <line x1="80" y1="120" x2="120" y2="120" />
-        </svg>
-      );
-    case 'monitors':
-      return (
-        <svg viewBox="0 0 200 160" className={`w-3/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="20" y="20" width="160" height="100" rx="6" />
-          <rect x="28" y="28" width="144" height="84" rx="2" fill="currentColor" fillOpacity="0.08" />
-          <path d="M100 120v20M70 140h60" />
-        </svg>
-      );
-    case 'keyboards':
-      return (
-        <svg viewBox="0 0 200 100" className={`w-3/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="20" y="30" width="160" height="50" rx="4" />
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-            <rect key={i} x={28 + i * 16} y="38" width="12" height="12" rx="1" fill="currentColor" fillOpacity="0.1" />
-          ))}
-          <rect x="28" y="56" width="144" height="6" rx="1" fill="currentColor" fillOpacity="0.1" />
-        </svg>
-      );
-    case 'mice':
-      return (
-        <svg viewBox="0 0 120 160" className={`w-2/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M60 20c-22 0-38 16-38 40v40c0 22 16 40 38 40s38-18 38-40V60c0-24-16-40-38-40z" />
-          <line x1="60" y1="20" x2="60" y2="50" />
-          <circle cx="60" cy="38" r="3" fill="currentColor" />
-        </svg>
-      );
-    case 'headphones':
-      return (
-        <svg viewBox="0 0 200 160" className={`w-3/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M30 90v-20a70 70 0 0 1 140 0v20" />
-          <rect x="20" y="85" width="30" height="50" rx="8" fill="currentColor" fillOpacity="0.08" />
-          <rect x="150" y="85" width="30" height="50" rx="8" fill="currentColor" fillOpacity="0.08" />
-        </svg>
-      );
-    case 'hubs':
-      return (
-        <svg viewBox="0 0 200 100" className={`w-3/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="30" y="35" width="140" height="30" rx="4" />
-          {[0, 1, 2, 3, 4].map((i) => (
-            <rect key={i} x={40 + i * 24} y="42" width="16" height="16" rx="2" fill="currentColor" fillOpacity="0.1" />
-          ))}
-        </svg>
-      );
-    case 'stands':
-      return (
-        <svg viewBox="0 0 160 160" className={`w-2/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M40 140V40a40 40 0 0 1 80 0v100" />
-          <line x1="40" y1="140" x2="120" y2="140" />
-          <line x1="80" y1="20" x2="80" y2="140" strokeDasharray="4 4" />
-        </svg>
-      );
-    case 'storage':
-      return (
-        <svg viewBox="0 0 160 100" className={`w-2/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="20" y="30" width="120" height="50" rx="6" />
-          <circle cx="120" cy="55" r="4" fill="currentColor" />
-          <line x1="30" y1="45" x2="90" y2="45" strokeDasharray="3 3" />
-          <line x1="30" y1="65" x2="90" y2="65" strokeDasharray="3 3" />
-        </svg>
-      );
-    case 'desk':
-      return (
-        <svg viewBox="0 0 200 120" className={`w-3/5 ${common}`} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="10" y="30" width="180" height="60" rx="4" />
-          <rect x="70" y="45" width="60" height="30" rx="2" fill="currentColor" fillOpacity="0.08" />
-          <circle cx="100" cy="60" r="8" fill="currentColor" fillOpacity="0.1" />
-        </svg>
-      );
-    default:
-      return null;
-  }
 }

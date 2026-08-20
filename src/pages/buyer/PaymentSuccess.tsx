@@ -35,16 +35,16 @@ export function PaymentSuccess() {
           </div>
         </div>
 
-        <h1 className="display-2xl text-white text-center">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black uppercase text-center tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-ink-50 to-ink-300">
           <span className="block">PURCHASE</span>
           <span className="block">COMPLETE.</span>
         </h1>
 
-        <div className="mt-8 text-center">
-          <span className="text-5xl lg:text-6xl font-extrabold tracking-tighter text-white">
+        <div className="mt-10 text-center">
+          <span className="font-display text-5xl lg:text-6xl font-black tracking-tighter text-white">
             ₹{total.toLocaleString('en-IN')}
           </span>
-          <p className="mt-4 text-ink-200">Payment successful.</p>
+          <p className="mt-4 text-ink-300 font-light">Payment successful. Agent transaction logged.</p>
         </div>
 
         {/* Transaction path animation */}

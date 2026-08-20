@@ -11,11 +11,13 @@ interface SectionHeadingProps {
 export function SectionHeading({ lines, subtitle, align = 'left', mode = 'dark' }: SectionHeadingProps) {
   const { ref, visible } = useReveal();
   const alignClass = align === 'center' ? 'text-center mx-auto' : '';
-  const textColor = mode === 'light' ? 'text-ink-950' : 'text-white';
+  const textColor = mode === 'light' 
+    ? 'text-ink-950 font-black' 
+    : 'text-transparent bg-clip-text bg-gradient-to-r from-white via-ink-50 to-ink-300 font-black';
 
   return (
     <div ref={ref} className={`${alignClass} max-w-4xl`}>
-      <h1 className={`display-xl ${textColor}`}>
+      <h1 className={`font-display text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tighter uppercase ${textColor}`}>
         {lines.map((line, i) => (
           <span key={i} className="block overflow-hidden">
             <span
@@ -62,10 +64,10 @@ interface StatusDotProps {
 
 export function StatusDot({ status, label }: StatusDotProps) {
   const colors = {
-    success: 'bg-white',
+    success: 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]',
     pending: 'bg-ink-300',
     blocked: 'bg-ink-100 border border-ink-300',
-    active: 'bg-white animate-pulse-dot',
+    active: 'bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)] animate-pulse-dot',
   };
   return (
     <span className="inline-flex items-center gap-2">
@@ -83,19 +85,26 @@ interface MetricCardProps {
 }
 
 export function MetricCard({ label, value, subValue, mode = 'dark' }: MetricCardProps) {
-  const border = mode === 'light' ? 'border-paperline' : 'border-line';
-  const labelColor = mode === 'light' ? 'text-ink-400' : 'text-ink-300';
-  const valueColor = mode === 'light' ? 'text-ink-950' : 'text-white';
+  const cardStyle = mode === 'light' 
+    ? 'glass-card-light p-6 relative overflow-hidden group/metric border-black/[0.08]' 
+    : 'glass-card p-6 relative overflow-hidden group/metric border-white/[0.08] glow-accent';
+  
+  const labelColor = mode === 'light' ? 'text-ink-500' : 'text-ink-300';
+  const valueColor = mode === 'light' ? 'text-ink-950 font-black' : 'text-transparent bg-clip-text bg-gradient-to-r from-white to-ink-200 font-black';
+
   return (
-    <div className={`border ${border} p-5 lg:p-6`}>
+    <div className={cardStyle}>
+      {/* Top accent glow effect */}
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-x-full group-hover/metric:translate-x-full transition-transform duration-1000" />
+      
       <div className={labelColor}>
         <span className="label-mono">{label}</span>
       </div>
-      <div className={`mt-3 text-3xl lg:text-4xl font-extrabold tracking-tighter ${valueColor}`}>
+      <div className={`mt-3 font-display text-4xl lg:text-5xl tracking-tighter ${valueColor}`}>
         {value}
       </div>
       {subValue && (
-        <div className="mt-1 text-sm text-ink-300 font-mono">{subValue}</div>
+        <div className="mt-2 text-xs text-ink-300 font-mono tracking-wide">{subValue}</div>
       )}
     </div>
   );

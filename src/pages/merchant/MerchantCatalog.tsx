@@ -82,7 +82,7 @@ export function MerchantCatalog() {
           ) : filtered.length === 0 ? (
             <EmptyState />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px bg-line">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 bg-transparent">
               {filtered.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -98,31 +98,42 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       to={`/merchant/catalog/${product.id}`}
-      className="group bg-ink-950 hover:bg-ink-900 transition-colors flex flex-col"
+      className="group glass-card glow-accent flex flex-col border border-white/[0.08] hover:scale-[1.01] hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-300"
     >
-      <ProductImage imageId={product.id} category={product.category} className="aspect-[4/3]" />
-      <div className="p-4 flex-1 flex flex-col">
-        <div className="flex items-center justify-between mb-2">
-          <span className="label-mono text-ink-300">{categoryLabels[product.category]}</span>
-          {product.aiReadable && (
-            <span className="flex items-center gap-1 label-mono-light">
-              <Check className="w-3 h-3" /> AI READY
-            </span>
-          )}
-        </div>
-        <h3 className="text-lg font-bold text-white group-hover:translate-x-0.5 transition-transform">
-          {product.name}
-        </h3>
-        <p className="mt-1 text-sm text-ink-300 line-clamp-2 flex-1">{product.description}</p>
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-xl font-extrabold tracking-tight text-white">{formatINR(product.price)}</span>
-          <span className="label-mono text-ink-300">INV: {product.inventory}</span>
-        </div>
-        <div className="mt-3 flex items-center gap-2">
-          <div className="flex-1 h-1 bg-ink-700">
-            <div className="h-full bg-white" style={{ width: `${product.aiDiscoverability}%` }} />
+      <div className="aspect-[4/3] overflow-hidden relative">
+        <ProductImage imageId={product.id} category={product.category} className="w-full h-full object-cover" />
+      </div>
+      
+      <div className="p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <span className="label-mono text-ink-300/80 text-[9px]">{categoryLabels[product.category].toUpperCase()}</span>
+            {product.aiReadable && (
+              <span className="flex items-center gap-1 label-mono-light text-[9px] bg-white/5 px-2 py-0.5 border border-white/10 font-bold">
+                <Check className="w-2.5 h-2.5 text-white" /> AI READY
+              </span>
+            )}
           </div>
-          <span className="label-mono text-ink-200">{product.aiDiscoverability}%</span>
+          
+          <h3 className="font-display text-lg font-bold text-white group-hover:text-white transition-colors">
+            {product.name}
+          </h3>
+          <p className="mt-2 text-xs text-ink-300 line-clamp-2 leading-relaxed font-light">{product.description}</p>
+        </div>
+        
+        <div className="mt-6 pt-4 border-t border-white/[0.06]">
+          <div className="flex items-baseline justify-between">
+            <span className="font-display text-xl font-bold tracking-tight text-white">{formatINR(product.price)}</span>
+            <span className="font-mono text-[9px] uppercase tracking-wider text-ink-300 font-bold">STOCK: {product.inventory}</span>
+          </div>
+          
+          <div className="mt-4 flex items-center gap-2">
+            <div className="flex-1 h-[2px] bg-white/5 rounded-full overflow-hidden">
+              <div className="h-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" style={{ width: `${product.aiDiscoverability}%` }} />
+            </div>
+            <span className="font-mono text-[10px] text-white/80 font-bold">{product.aiDiscoverability}%</span>
+          </div>
+          <div className="mt-1 text-[9px] label-mono text-ink-300/60 tracking-wider">AI DISCOVERABILITY</div>
         </div>
       </div>
     </Link>

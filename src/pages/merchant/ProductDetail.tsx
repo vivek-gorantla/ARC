@@ -64,38 +64,36 @@ export function ProductDetail() {
   return (
     <PageLayout mode="merchant">
       <div className="px-5 lg:px-8 py-8 lg:py-12">
-        <Link to="/merchant/catalog" className="inline-flex items-center gap-2 label-mono text-ink-300 hover:text-white transition-colors mb-8">
-          <ArrowLeft className="w-4 h-4" /> BACK TO CATALOG
+        <Link to="/merchant/catalog" className="inline-flex items-center gap-2 label-mono text-ink-300 hover:text-white transition-colors mb-8 group">
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> BACK TO CATALOG
         </Link>
 
         {/* View toggle */}
-        <div className="flex items-center gap-px bg-line border border-line w-fit mb-8">
+        <div className="flex items-center gap-1 p-1 bg-white/[0.02] border border-white/[0.08] w-fit mb-8">
           <button
             onClick={() => setView('human')}
-            className={`px-4 py-2 label-mono transition-colors ${
-              view === 'human' ? 'bg-ink-800 text-white' : 'bg-ink-950 text-ink-300 hover:text-ink-100'
-            }`}
+            className={`px-4 py-2 label-mono transition-all duration-200 ${view === 'human' ? 'bg-white text-ink-950 font-black shadow-[0_0_12px_rgba(255,255,255,0.15)]' : 'bg-transparent text-ink-300 hover:text-ink-100'
+              }`}
           >
             HUMAN VIEW
           </button>
           <button
             onClick={() => setView('ai')}
-            className={`px-4 py-2 label-mono transition-colors ${
-              view === 'ai' ? 'bg-ink-800 text-white' : 'bg-ink-950 text-ink-300 hover:text-ink-100'
-            }`}
+            className={`px-4 py-2 label-mono transition-all duration-200 ${view === 'ai' ? 'bg-white text-ink-950 font-black shadow-[0_0_12px_rgba(255,255,255,0.15)]' : 'bg-transparent text-ink-300 hover:text-ink-100'
+              }`}
           >
             AI VIEW
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-line">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image */}
-          <div className="bg-ink-950">
-            <ProductImage imageId={product.id} category={product.category} className="aspect-square lg:aspect-auto lg:h-full" />
+          <div className="border border-white/[0.08] relative overflow-hidden aspect-square lg:aspect-auto min-h-[400px]">
+            <ProductImage imageId={product.id} category={product.category} className="w-full h-full object-cover" />
           </div>
 
           {/* Content */}
-          <div className="bg-ink-950 p-6 lg:p-10">
+          <div className="glass-card glow-accent p-8 lg:p-12 border border-white/[0.08]">
             {view === 'human' ? (
               <HumanView product={product} />
             ) : (
@@ -106,19 +104,21 @@ export function ProductDetail() {
 
         {/* Related */}
         {related.length > 0 && (
-          <div className="mt-16">
-            <Label>RELATED PRODUCTS</Label>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line">
+          <div className="mt-20">
+            <Label className="tracking-widest">RELATED PRODUCTS</Label>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((rp) => (
                 <Link
                   key={rp.id}
                   to={`/merchant/catalog/${rp.id}`}
-                  className="group bg-ink-950 hover:bg-ink-900 transition-colors flex items-center gap-4 p-4"
+                  className="group glass-card glow-accent flex items-center gap-4 p-5 border border-white/[0.06] hover:border-white/20 transition-all duration-300"
                 >
-                  <ProductImage imageId={rp.id} category={rp.category} className="w-20 h-20 flex-shrink-0" />
+                  <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
+                    <ProductImage imageId={rp.id} category={rp.category} className="w-full h-full object-cover" />
+                  </div>
                   <div>
-                    <h4 className="text-white font-bold group-hover:translate-x-0.5 transition-transform">{rp.name}</h4>
-                    <span className="text-ink-300 text-sm">{formatINR(rp.price)}</span>
+                    <h4 className="text-white font-bold group-hover:translate-x-1 transition-transform duration-300">{rp.name}</h4>
+                    <span className="text-ink-300 text-sm mt-1 block font-mono">{formatINR(rp.price)}</span>
                   </div>
                 </Link>
               ))}
@@ -133,30 +133,36 @@ export function ProductDetail() {
 function HumanView({ product }: { product: Product }) {
   return (
     <>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-4">
         <span className="label-mono text-ink-300">{product.id}</span>
         {product.aiReadable && (
-          <span className="flex items-center gap-1.5 label-mono-light border border-line px-2 py-1">
-            <Check className="w-3 h-3" /> AI-READABLE
+          <span className="flex items-center gap-1.5 label-mono-light bg-white/5 border border-white/10 px-2.5 py-1 text-[9px] font-bold">
+            <Check className="w-3 h-3 text-white" /> AI-READABLE
           </span>
         )}
       </div>
-      <h1 className="display-sm text-white">{product.name}</h1>
-      <p className="mt-4 text-ink-200 leading-relaxed">{product.description}</p>
+      <h1 className="font-display text-4xl lg:text-5xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-ink-300 leading-none">{product.name}</h1>
+      <p className="mt-6 text-sm text-ink-200 leading-relaxed font-light">{product.description}</p>
 
-      <div className="mt-8 flex items-baseline gap-4">
-        <span className="text-4xl font-extrabold tracking-tighter text-white">{formatINR(product.price)}</span>
-        <span className="label-mono text-ink-300">INVENTORY: {product.inventory}</span>
+      <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-baseline justify-between">
+        <div>
+          <div className="label-mono text-ink-400 mb-1">PRICE</div>
+          <span className="font-display text-4xl font-black tracking-tight text-white">{formatINR(product.price)}</span>
+        </div>
+        <div className="text-right">
+          <div className="label-mono text-ink-400 mb-1">AVAILABILITY</div>
+          <span className="font-mono text-sm text-white font-bold">{product.inventory} UNITS LEFT</span>
+        </div>
       </div>
 
       {/* Specs */}
-      <div className="mt-8">
-        <Label>SPECIFICATIONS</Label>
-        <div className="mt-4 space-y-px">
+      <div className="mt-10">
+        <Label className="tracking-widest block mb-4">SPECIFICATIONS</Label>
+        <div className="space-y-px">
           {Object.entries(product.specs).map(([key, val]) => (
-            <div key={key} className="flex justify-between py-2.5 border-b border-line">
-              <span className="label-mono text-ink-300">{key}</span>
-              <span className="text-sm text-white font-mono">{val}</span>
+            <div key={key} className="flex justify-between py-3 border-b border-white/[0.06]">
+              <span className="label-mono text-ink-300 text-[9px]">{key}</span>
+              <span className="text-xs text-white font-mono">{val}</span>
             </div>
           ))}
         </div>
@@ -168,9 +174,9 @@ function HumanView({ product }: { product: Product }) {
 function AiView({ product }: { product: Product }) {
   return (
     <div className="font-mono">
-      <div className="flex items-center gap-2 mb-6">
-        <span className="flex items-center gap-1.5 label-mono-light border border-white px-2 py-1">
-          <Check className="w-3 h-3" /> AI-READABLE ✓
+      <div className="flex items-center gap-2 mb-8">
+        <span className="flex items-center gap-1.5 label-mono-light bg-white/5 border border-white/10 px-2.5 py-1 text-[9px] font-bold">
+          <Check className="w-3 h-3 text-white" /> AI-READABLE ✓
         </span>
       </div>
 
@@ -179,11 +185,11 @@ function AiView({ product }: { product: Product }) {
       <AiField icon={IndianRupee} label="PRICE" value={formatINR(product.price)} />
       <AiField icon={Layers} label="INVENTORY" value={String(product.inventory)} />
 
-      <div className="mt-6">
-        <Label>USE CASES</Label>
-        <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-8">
+        <Label className="tracking-widest block mb-3">USE CASES</Label>
+        <div className="flex flex-wrap gap-2">
           {product.useCases.map((uc) => (
-            <span key={uc} className="px-3 py-1.5 border border-line text-sm text-white font-mono">
+            <span key={uc} className="px-3 py-1.5 border border-white/[0.08] text-xs text-white font-mono bg-white/[0.01]">
               {uc}
             </span>
           ))}
@@ -191,10 +197,10 @@ function AiView({ product }: { product: Product }) {
       </div>
 
       <div className="mt-6">
-        <Label>SUITABLE FOR</Label>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <Label className="tracking-widest block mb-3">SUITABLE FOR</Label>
+        <div className="flex flex-wrap gap-2">
           {product.suitableFor.map((sf) => (
-            <span key={sf} className="px-3 py-1.5 border border-line text-sm text-white font-mono">
+            <span key={sf} className="px-3 py-1.5 border border-white/[0.08] text-xs text-white font-mono bg-white/[0.01]">
               {sf}
             </span>
           ))}
@@ -202,10 +208,10 @@ function AiView({ product }: { product: Product }) {
       </div>
 
       <div className="mt-6">
-        <Label>COMPATIBLE WITH</Label>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <Label className="tracking-widest block mb-3">COMPATIBLE WITH</Label>
+        <div className="flex flex-wrap gap-2">
           {product.compatibleWith.map((c) => (
-            <span key={c} className="px-3 py-1.5 border border-line text-sm text-ink-200 font-mono">
+            <span key={c} className="px-3 py-1.5 border border-white/[0.08] text-xs text-ink-200 font-mono bg-white/[0.01]">
               {c}
             </span>
           ))}
@@ -213,26 +219,26 @@ function AiView({ product }: { product: Product }) {
       </div>
 
       <div className="mt-6">
-        <Label>BUNDLES</Label>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <Label className="tracking-widest block mb-3">BUNDLES</Label>
+        <div className="flex flex-wrap gap-2">
           {product.bundles.map((b) => (
-            <span key={b} className="px-3 py-1.5 border border-line text-sm text-ink-200 font-mono">
+            <span key={b} className="px-3 py-1.5 border border-white/[0.08] text-xs text-ink-200 font-mono bg-white/[0.01]">
               {b}
             </span>
           ))}
         </div>
       </div>
 
-      <div className="mt-8 border-t border-line pt-6">
+      <div className="mt-8 border-t border-white/[0.06] pt-6">
         <div className="flex items-center gap-2">
           <Cpu className="w-4 h-4 text-white" strokeWidth={1.5} />
-          <span className="label-mono-light">AI DISCOVERABILITY</span>
+          <span className="label-mono-light text-[9px]">AI DISCOVERABILITY INDEX</span>
         </div>
         <div className="mt-3 flex items-center gap-3">
-          <div className="flex-1 h-1.5 bg-ink-700">
-            <div className="h-full bg-white" style={{ width: `${product.aiDiscoverability}%` }} />
+          <div className="flex-1 h-[3px] bg-white/5 rounded-full overflow-hidden">
+            <div className="h-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" style={{ width: `${product.aiDiscoverability}%` }} />
           </div>
-          <span className="text-2xl font-extrabold text-white">{product.aiDiscoverability}%</span>
+          <span className="text-xl font-bold font-mono text-white">{product.aiDiscoverability}%</span>
         </div>
       </div>
     </div>
@@ -241,12 +247,12 @@ function AiView({ product }: { product: Product }) {
 
 function AiField({ icon: Icon, label, value }: { icon: typeof Box; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between py-3 border-b border-line">
+    <div className="flex items-center justify-between py-3.5 border-b border-white/[0.06]">
       <div className="flex items-center gap-2">
         <Icon className="w-3.5 h-3.5 text-ink-300" strokeWidth={1.5} />
-        <span className="label-mono">{label}</span>
+        <span className="label-mono text-[9px]">{label}</span>
       </div>
-      <span className="text-sm text-white font-mono">{value}</span>
+      <span className="text-xs text-white font-mono font-bold">{value}</span>
     </div>
   );
 }

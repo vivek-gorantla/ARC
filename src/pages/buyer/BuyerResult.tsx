@@ -77,54 +77,63 @@ export function BuyerResult() {
       <div className="px-5 lg:px-8 py-16 lg:py-22">
         {/* Understood */}
         <div>
-          <Label>UNDERSTOOD</Label>
-          <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-px bg-line max-w-3xl">
+          <Label className="tracking-widest block mb-4">UNDERSTOOD INTENT</Label>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-transparent max-w-4xl">
             <IntentField label="Use case" value={intent.useCase} />
-            <IntentField label="Budget" value={intent.budget} />
-            <IntentField label="Priority" value={intent.priority} />
-            <IntentField label="Preference" value={intent.preference} />
+            <IntentField label="Budget limit" value={intent.budget} />
+            <IntentField label="Optimization priority" value={intent.priority} />
+            <IntentField label="Form factor preference" value={intent.preference} />
           </div>
         </div>
 
         {/* Best match */}
         {selected && (
           <div className="mt-16">
-            <h2 className="display-lg text-white">YOUR BEST MATCH</h2>
-            <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-px bg-line">
-              <div className="bg-ink-950">
-                <ProductImage imageId={selected.id} category={selected.category} className="aspect-square lg:aspect-auto lg:h-full" />
+            <h2 className="font-display text-3xl md:text-4xl font-extrabold text-white tracking-tight uppercase block mb-6">YOUR BEST MATCH</h2>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="border border-white/[0.08] relative overflow-hidden aspect-square lg:aspect-auto min-h-[400px]">
+                <ProductImage imageId={selected.id} category={selected.category} className="w-full h-full object-cover" />
               </div>
-              <div className="bg-ink-950 p-6 lg:p-10">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="label-mono text-ink-300">{selected.id}</span>
-                  <span className="flex items-center gap-1.5 label-mono-light border border-white px-2 py-1">
-                    <Check className="w-3 h-3" /> 4/4 REQUIREMENTS MATCHED
-                  </span>
-                </div>
-                <h3 className="display-sm text-white mt-2">{selected.name}</h3>
-                <p className="mt-4 text-ink-200">{selected.description}</p>
+              
+              <div className="glass-card glow-accent p-8 lg:p-12 border border-white/[0.08] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="label-mono text-ink-300">{selected.id}</span>
+                    <span className="flex items-center gap-1.5 label-mono-light bg-white/5 border border-white/10 px-2.5 py-1 text-[9px] font-bold">
+                      <Check className="w-3 h-3 text-white" /> 4/4 REQUIREMENTS MATCHED
+                    </span>
+                  </div>
+                  
+                  <h3 className="font-display text-3xl lg:text-4xl font-black uppercase text-transparent bg-clip-text bg-gradient-to-br from-white to-ink-300 mt-2 leading-none">
+                    {selected.name}
+                  </h3>
+                  <p className="mt-4 text-sm text-ink-200 leading-relaxed font-light">{selected.description}</p>
 
-                <div className="mt-6">
-                  <Label>WHY THIS MATCHES</Label>
-                  <div className="mt-3 space-y-2">
-                    <MatchReason text={`Use case: ${selected.useCases[0]}`} />
-                    <MatchReason text={`Price ${formatINR(selected.price)} within budget`} />
-                    <MatchReason text={`${selected.specs['Weight'] || 'Portable'} — meets portability preference`} />
-                    <MatchReason text={`AI discoverability: ${selected.aiDiscoverability}%`} />
+                  <div className="mt-8 pt-6 border-t border-white/[0.06]">
+                    <Label className="tracking-widest block mb-4">MATCH RATIONALE</Label>
+                    <div className="space-y-3">
+                      <MatchReason text={`Use case context: "${selected.useCases[0]}" matches constraints`} />
+                      <MatchReason text={`Price of ${formatINR(selected.price)} fits within parsed budget limit`} />
+                      <MatchReason text={`Specs identify lightweight ${selected.specs['Weight'] || 'portable'} body build`} />
+                      <MatchReason text={`Verified discoverability index: ${selected.aiDiscoverability}%`} />
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-8 flex items-baseline gap-4">
-                  <span className="text-4xl font-extrabold tracking-tighter text-white">{formatINR(selected.price)}</span>
-                  <span className="label-mono text-ink-300">IN STOCK: {selected.inventory}</span>
+                <div className="mt-10 pt-6 border-t border-white/[0.06]">
+                  <div className="flex items-baseline justify-between mb-4">
+                    <span className="font-display text-3xl font-black text-white">{formatINR(selected.price)}</span>
+                    <span className="font-mono text-xs text-ink-300 font-bold">UNITS IN STOCK: {selected.inventory}</span>
+                  </div>
+                  
+                  <button
+                    onClick={() => addToBag(selected.id)}
+                    className="w-full py-4 bg-white text-ink-950 font-black tracking-tight hover:bg-ink-100 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-4 h-4 text-ink-950" strokeWidth={3} /> ADD TO BAG
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => addToBag(selected.id)}
-                  className="mt-6 w-full py-3.5 bg-white text-ink-950 font-bold tracking-tight hover:bg-ink-100 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Plus className="w-4 h-4" /> ADD TO BAG
-                </button>
               </div>
             </div>
           </div>
@@ -132,19 +141,21 @@ export function BuyerResult() {
 
         {/* AI Recommendations */}
         {recommendations.length > 0 && (
-          <div className="mt-16">
-            <Label>AI RECOMMENDS ADDING</Label>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-px bg-line">
+          <div className="mt-20">
+            <Label className="tracking-widest block mb-6">AI RECOMMENDED COMPATIBLE ADDITIONS</Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-transparent">
               {recommendations.map((rec) => (
-                <div key={rec.id} className="bg-ink-950 p-5 flex items-center gap-4">
-                  <ProductImage imageId={rec.id} category={rec.category} className="w-16 h-16 flex-shrink-0" />
+                <div key={rec.id} className="glass-card glow-accent p-5 flex items-center gap-5 border border-white/[0.06] hover:border-white/20 transition-all duration-300">
+                  <div className="w-16 h-16 flex-shrink-0 overflow-hidden">
+                    <ProductImage imageId={rec.id} category={rec.category} className="w-full h-full object-cover" />
+                  </div>
                   <div className="flex-1">
-                    <h4 className="text-white font-bold">{rec.name}</h4>
-                    <span className="text-sm text-ink-300">{formatINR(rec.price)}</span>
+                    <h4 className="text-white font-bold text-base">{rec.name}</h4>
+                    <span className="text-sm text-ink-300 block mt-1 font-mono">{formatINR(rec.price)}</span>
                   </div>
                   <button
                     onClick={() => addToBag(rec.id)}
-                    className="label-mono border border-line px-3 py-2 hover:border-white transition-colors"
+                    className="label-mono bg-white text-ink-950 hover:bg-ink-100 px-4 py-2 hover:scale-105 active:scale-95 transition-all duration-200 font-black shadow-[0_0_10px_rgba(255,255,255,0.1)]"
                   >
                     ADD
                   </button>
@@ -156,20 +167,24 @@ export function BuyerResult() {
 
         {/* Other matches */}
         {matches.length > 1 && (
-          <div className="mt-16">
-            <Label>OTHER MATCHES</Label>
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line">
+          <div className="mt-20">
+            <Label className="tracking-widest block mb-6">ALTERNATIVE CANDIDATES</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-transparent">
               {matches.slice(1, 4).map((m) => (
                 <button
                   key={m.id}
                   onClick={() => setSelected(m)}
-                  className={`bg-ink-950 p-5 text-left transition-colors ${
-                    selected?.id === m.id ? 'bg-ink-900' : 'hover:bg-ink-900'
+                  className={`group text-left transition-all duration-300 flex flex-col justify-between p-5 border min-h-[120px] ${
+                    selected?.id === m.id
+                      ? 'bg-white text-ink-950 border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]'
+                      : 'glass-card border-white/[0.08] hover:border-white/30'
                   }`}
                 >
-                  <span className="label-mono text-ink-300">{m.id}</span>
-                  <h4 className="mt-1 text-white font-bold">{m.name}</h4>
-                  <span className="text-sm text-ink-300">{formatINR(m.price)}</span>
+                  <div>
+                    <span className={`label-mono text-[9px] ${selected?.id === m.id ? 'text-ink-700' : 'text-ink-300'}`}>{m.id}</span>
+                    <h4 className={`mt-1 font-bold text-sm leading-tight ${selected?.id === m.id ? 'text-ink-950' : 'text-white'}`}>{m.name}</h4>
+                  </div>
+                  <span className={`text-sm mt-4 font-mono ${selected?.id === m.id ? 'text-ink-950 font-bold' : 'text-ink-200'}`}>{formatINR(m.price)}</span>
                 </button>
               ))}
             </div>
@@ -180,7 +195,7 @@ export function BuyerResult() {
         <div className="mt-16 flex justify-end">
           <button
             onClick={() => navigate('/buyer/bag')}
-            className="inline-flex items-center gap-2 label-mono-light border border-line px-5 py-3 hover:border-white transition-colors"
+            className="inline-flex items-center gap-2 label-mono bg-white text-ink-950 px-6 py-3.5 hover:bg-ink-100 hover:scale-105 active:scale-95 transition-all duration-200 font-black shadow-[0_0_15px_rgba(255,255,255,0.1)]"
           >
             VIEW BAG <ArrowRight className="w-4 h-4" />
           </button>

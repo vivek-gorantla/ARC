@@ -18,13 +18,13 @@ export function BuyerBlocked() {
           </div>
         </div>
 
-        <h1 className="display-2xl text-white text-center">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black uppercase text-center tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-ink-50 to-ink-300">
           <span className="block">PURCHASE</span>
           <span className="block text-ink-300">BLOCKED.</span>
         </h1>
 
-        <p className="mt-8 text-center text-ink-200 max-w-lg mx-auto">
-          This is a safety mechanism. The transaction was evaluated against your spending policy and did not pass.
+        <p className="mt-8 text-center text-ink-300 font-light max-w-lg mx-auto leading-relaxed">
+          This is a transaction safety mechanism. The autonomous payment was evaluated against your configured buyer spending policies and was blocked.
         </p>
 
         {/* Breakdown */}
